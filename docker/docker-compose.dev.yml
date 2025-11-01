@@ -1,0 +1,51 @@
+# Simple Docker Compose for Development
+# This is a simplified version for local development
+
+version: '3.8'
+
+services:
+  # Backend API Service
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    container_name: numerics-backend-dev
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - API_KEY=dev-api-key-123
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+    volumes:
+      - ../src:/app/src
+      - backend_data:/app/data
+      - backend_models:/app/models
+      - backend_results:/app/results
+    networks:
+      - numerics-dev
+    restart: unless-stopped
+    command: ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  # Frontend React Service (Development)
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    container_name: numerics-frontend-dev
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - numerics-dev
+    restart: unless-stopped
+
+volumes:
+  backend_data:
+  backend_models:
+  backend_results:
+
+networks:
+  numerics-dev:
+    driver: bridge
