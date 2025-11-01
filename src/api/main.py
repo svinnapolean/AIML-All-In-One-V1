@@ -1,11 +1,19 @@
 """
-FastAPI Main Application
+AI/ML Learning Platform - FastAPI Main Application
 
-This module sets up the main FastAPI application with:
-- API routers for different functionalities
+This module sets up the main FastAPI application for the AI/ML Learning Platform with:
+- Educational API endpoints for ML model training and deployment
+- AI agent interaction for learning agent development
+- Public API endpoints for ML model consumption
 - Middleware for authentication, CORS, and logging
-- Global error handling
+- Global error handling and monitoring
 - WebSocket support for real-time agent interaction
+
+Educational Focus:
+- Demonstrates production-ready ML API development
+- Shows best practices for ML model serving
+- Integrates Azure ADK evaluation for AI systems
+- Provides examples of CI/CD for ML applications
 """
 
 import os

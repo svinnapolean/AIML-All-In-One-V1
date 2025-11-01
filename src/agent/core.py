@@ -1,11 +1,20 @@
 """
-Core AI Agent Implementation using Microsoft Agent Framework
+AI Agent Learning Module - Core Implementation using Microsoft Agent Framework
 
-This module implements a comprehensive AI agent for numerical processing tasks including:
-- Model inference and predictions
-- Data analysis and insights
-- Interactive conversation and tool usage
-- Integration with GitHub models for cost-effective AI
+This educational module demonstrates comprehensive AI agent development including:
+- Agent architecture and design patterns
+- Microsoft Agent Framework integration for learning
+- GitHub Models integration for cost-effective AI development
+- Tool creation and management for agent capabilities
+- Conversation handling and context management
+- Integration with ML models for intelligent responses
+
+Learning Objectives:
+- Understand agent-based AI system architecture
+- Learn Microsoft Agent Framework best practices
+- Implement cost-effective AI using GitHub models
+- Master agent evaluation and optimization techniques
+- Apply Azure ADK for comprehensive agent assessment
 """
 
 import os

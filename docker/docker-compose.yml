@@ -1,12 +1,12 @@
 version: '3.8'
 
 services:
-  # Backend API Service
-  backend:
+  # Backend API Service - Educational ML Platform
+  ai-ml-backend:
     build:
       context: ..
       dockerfile: docker/Dockerfile.backend
-    container_name: numerics-backend
+    container_name: ai-ml-learning-backend
     ports:
       - "8000:8000"
     environment:
@@ -27,7 +27,7 @@ services:
       - backend_logs:/app/logs
       - backend_uploads:/app/uploads
     networks:
-      - numerics-network
+      - ai-ml-network
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
@@ -36,18 +36,18 @@ services:
       retries: 3
       start_period: 40s
 
-  # Frontend React Service
-  frontend:
+  # Frontend React Service - Learning Interface
+  ai-ml-frontend:
     build:
       context: ..
       dockerfile: docker/Dockerfile.frontend
-    container_name: numerics-frontend
+    container_name: ai-ml-learning-frontend
     ports:
       - "3000:3000"
     depends_on:
-      - backend
+      - ai-ml-backend
     networks:
-      - numerics-network
+      - ai-ml-network
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
@@ -59,13 +59,13 @@ services:
   # Redis Cache (Optional - for session management)
   redis:
     image: redis:7-alpine
-    container_name: numerics-redis
+    container_name: ai-ml-learning-redis
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
     networks:
-      - numerics-network
+      - ai-ml-network
     restart: unless-stopped
     command: redis-server --appendonly yes
     healthcheck:
@@ -77,18 +77,18 @@ services:
   # PostgreSQL Database (Optional - for data persistence)
   database:
     image: postgres:15-alpine
-    container_name: numerics-db
+    container_name: ai-ml-learning-db
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=${POSTGRES_DB:-numerics_db}
+      - POSTGRES_DB=${POSTGRES_DB:-ai_ml_learning_db}
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - numerics-network
+      - ai-ml-network
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
@@ -99,7 +99,7 @@ services:
   # Nginx Load Balancer (Optional - for production)
   nginx:
     image: nginx:alpine
-    container_name: numerics-nginx
+    container_name: ai-ml-learning-nginx
     ports:
       - "80:80"
       - "443:443"
@@ -107,10 +107,10 @@ services:
       - ./nginx-lb.conf:/etc/nginx/nginx.conf
       - nginx_logs:/var/log/nginx
     depends_on:
-      - frontend
-      - backend
+      - ai-ml-frontend
+      - ai-ml-backend
     networks:
-      - numerics-network
+      - ai-ml-network
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80"]
@@ -139,8 +139,9 @@ volumes:
 
 # Networks
 networks:
-  numerics-network:
+  ai-ml-network:
     driver: bridge
+    name: ai-ml-learning-network
     ipam:
       config:
         - subnet: 172.20.0.0/16
