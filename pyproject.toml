@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "numerics-processor"
+name = "ai-ml-learning-platform"
 version = "0.1.0"
-description = "Comprehensive AI project with model training, agent capabilities, and evaluation"
+description = "Comprehensive educational platform for learning AI/ML development, deployment, evaluation, and CI/CD practices with Azure ADK integration"
 authors = [
     {name = "AI SimpleLearn", email = "admin@simplelearn.com"}
 ]
@@ -13,12 +13,16 @@ readme = "README.md"
 requires-python = ">=3.9"
 classifiers = [
     "Development Status :: 3 - Alpha",
+    "Intended Audience :: Education",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Topic :: Education",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
     "fastapi>=0.104.0",
@@ -54,9 +58,11 @@ agent = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/simplelearn/numerics-processor"
-Repository = "https://github.com/simplelearn/numerics-processor.git"
-Issues = "https://github.com/simplelearn/numerics-processor/issues"
+Homepage = "https://github.com/svinnapolean/AIML-All-In-One-V1"
+Repository = "https://github.com/svinnapolean/AIML-All-In-One-V1.git"
+Issues = "https://github.com/svinnapolean/AIML-All-In-One-V1/issues"
+Documentation = "https://github.com/svinnapolean/AIML-All-In-One-V1/blob/main/README.md"
+"Educational Resources" = "https://github.com/svinnapolean/AIML-All-In-One-V1/tree/main/docs"
 
 [tool.setuptools.packages.find]
 where = ["src"]

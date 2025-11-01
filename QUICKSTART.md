@@ -1,4 +1,14 @@
-# Quick Start Guide
+# AI/ML Learning Platform - Quick Start Guide
+
+## 🎯 Learning Objectives
+
+This platform teaches you how to:
+- Build complete ML pipelines from training to deployment
+- Create AI agents using Microsoft Agent Framework
+- Deploy ML models via public APIs for consumption
+- Evaluate AI systems using Azure ADK
+- Implement CI/CD practices for ML applications
+- Containerize and scale ML applications
 
 ## 🚀 Getting Started
 
@@ -6,6 +16,7 @@
 - Python 3.9+
 - Node.js 16+ (for frontend)
 - GitHub Token (for AI agent)
+- Docker (optional, for deployment)
 
 ### Installation
 
@@ -53,13 +64,32 @@
 ### API Documentation
 Visit `http://localhost:8000/docs` for interactive API documentation.
 
-### Key Features
-- ✅ ML Model Training & Prediction
-- ✅ AI Agent Chat Interface
-- ✅ Data Upload & Processing
-- ✅ Azure AI Evaluation
-- ✅ Docker Deployment
-- ✅ React Frontend
+### 🎓 Learning Path Recommendations
+
+#### Beginner Level:
+1. Start with **Model Training** (`/models/*` endpoints)
+2. Learn **Data Upload** and processing (`/data/*` endpoints)  
+3. Explore **API Documentation** at `http://localhost:8000/docs`
+
+#### Intermediate Level:
+1. Build **AI Agents** using the chat interface (`/agent/*` endpoints)
+2. Implement **Custom Evaluators** with Azure ADK
+3. Deploy using **Docker** containers
+
+#### Advanced Level:
+1. Set up **CI/CD pipelines** for model automation
+2. Scale with **Load Balancing** and monitoring
+3. Customize **Agent Tools** and capabilities
+
+### Key Features - What You'll Learn
+- ✅ **ML Model Training & Prediction** - Complete pipeline development
+- ✅ **AI Agent Chat Interface** - Microsoft Agent Framework integration
+- ✅ **Data Upload & Processing** - Production data handling
+- ✅ **Azure AI Evaluation** - Comprehensive model assessment
+- ✅ **Docker Deployment** - Containerized application deployment
+- ✅ **React Frontend** - Modern UI development for ML applications
+- ✅ **Public API Development** - RESTful APIs for ML model serving
+- ✅ **CI/CD for ML** - DevOps practices for machine learning
 
 ### Troubleshooting
 - Run `python test_imports.py` to verify all components
