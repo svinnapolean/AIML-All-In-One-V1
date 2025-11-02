@@ -5,6 +5,7 @@ A comprehensive educational platform for learning AI/ML development, deployment,
 ## 🎯 Educational Objectives
 
 This platform teaches developers how to:
+
 - **Build Complete ML Pipelines**: From data preprocessing to model deployment
 - **Implement AI Agents**: Using Microsoft Agent Framework with Azure integration
 - **Deploy ML Models**: Via REST APIs for public consumption
@@ -73,7 +74,9 @@ ai_ml_learning_platform/
 ## 🎓 Learning Modules
 
 ### 1. **Machine Learning Development** 📚
+
 Learn complete ML pipeline development:
+
 - Data preprocessing and feature engineering
 - Multiple algorithm implementation (Random Forest, Neural Networks, Linear Models)
 - Hyperparameter tuning and cross-validation
@@ -81,7 +84,9 @@ Learn complete ML pipeline development:
 - Performance evaluation and metrics
 
 ### 2. **AI Agent Creation** 🤖
+
 Master AI agent development:
+
 - Microsoft Agent Framework integration
 - GitHub Models for cost-effective development
 - Tool creation and integration
@@ -89,7 +94,9 @@ Master AI agent development:
 - Agent evaluation and optimization
 
 ### 3. **Public API Development** 🌐
+
 Build production-ready ML APIs:
+
 - FastAPI implementation for ML model serving
 - Authentication and security best practices
 - Real-time prediction endpoints
@@ -97,7 +104,9 @@ Build production-ready ML APIs:
 - API documentation and testing
 
 ### 4. **Azure ADK Evaluation** 📊
+
 Learn comprehensive AI evaluation:
+
 - Azure AI Evaluation SDK integration
 - Built-in and custom evaluators
 - Performance metrics and benchmarking
@@ -105,7 +114,9 @@ Learn comprehensive AI evaluation:
 - Evaluation reporting and visualization
 
 ### 5. **CI/CD for ML** 🔄
+
 Implement MLOps best practices:
+
 - Automated model training pipelines
 - Continuous integration for ML code
 - Model deployment automation
@@ -113,7 +124,9 @@ Implement MLOps best practices:
 - Environment management
 
 ### 6. **Production Deployment** 🚀
+
 Deploy ML systems at scale:
+
 - Multi-service Docker deployment
 - Load balancing and scaling
 - Monitoring and logging
@@ -123,6 +136,7 @@ Deploy ML systems at scale:
 ## 🛠 Technology Stack
 
 ### Backend
+
 - **Python 3.11+**: Core programming language
 - **Microsoft Agent Framework**: AI agent implementation with GitHub models
 - **FastAPI**: Modern, fast web framework for APIs
@@ -131,12 +145,14 @@ Deploy ML systems at scale:
 - **Azure AI Evaluation SDK**: Agent performance evaluation
 
 ### Frontend
+
 - **React 18**: Modern UI framework
 - **TypeScript**: Type-safe JavaScript
 - **Tailwind CSS**: Utility-first CSS framework
 - **React Router**: Client-side routing
 
 ### Infrastructure
+
 - **Docker**: Containerization
 - **PostgreSQL**: Database
 - **Redis**: Caching
@@ -154,26 +170,28 @@ Deploy ML systems at scale:
 ### Environment Setup
 
 1. **Clone the repository**:
+
    ```bash
    git clone <repository-url>
    cd numerics_processor
    ```
-
 2. **Set up environment variables**:
+
    ```bash
    # Create .env file
    echo "GITHUB_TOKEN=your_github_token_here" > .env
    echo "DATABASE_URL=postgresql://user:password@localhost:5432/numerics" >> .env
    echo "REDIS_URL=redis://localhost:6379" >> .env
    ```
-
 3. **Start with Docker (Recommended)**:
+
    ```bash
    cd docker
    docker-compose up -d
    ```
 
    This will start:
+
    - Backend API on http://localhost:8000
    - Frontend UI on http://localhost:3000
    - PostgreSQL database on port 5432
@@ -182,6 +200,7 @@ Deploy ML systems at scale:
 ### Local Development Setup
 
 #### Backend Development
+
 ```bash
 # Install dependencies
 pip install -r requirements.txt
@@ -195,6 +214,7 @@ python -m uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 #### Frontend Development
+
 ```bash
 cd frontend
 npm install
@@ -202,6 +222,7 @@ npm start
 ```
 
 #### Run Evaluation
+
 ```bash
 cd src/evaluation
 python runner.py
@@ -210,6 +231,7 @@ python runner.py
 ## 🧪 Machine Learning Pipeline
 
 ### Model Training
+
 ```python
 from src.models.training import ModelTrainer, TrainingConfig
 
@@ -226,6 +248,7 @@ results = trainer.train(X_train, y_train)
 ```
 
 ### Model Testing
+
 ```python
 from src.models.testing import ModelTester
 
@@ -234,6 +257,7 @@ test_results = tester.test_all_models(X_test, y_test)
 ```
 
 ### Model Evaluation
+
 ```python
 from src.models.evaluation import ModelEvaluator
 
@@ -244,6 +268,7 @@ evaluation_report = evaluator.evaluate_model_performance(model, X_test, y_test)
 ## 🤖 AI Agent Usage
 
 ### Agent Interaction
+
 ```python
 from src.agent.core import NumericsAgent, AgentConfig
 
@@ -260,6 +285,7 @@ response = await agent.chat("Calculate the mean of [1, 2, 3, 4, 5]")
 ```
 
 ### Available Agent Tools
+
 - **Numerical Computation**: Basic and advanced mathematical operations
 - **Statistical Analysis**: Descriptive and inferential statistics
 - **Data Visualization**: Chart and plot generation
@@ -268,22 +294,26 @@ response = await agent.chat("Calculate the mean of [1, 2, 3, 4, 5]")
 ## 🌐 API Endpoints
 
 ### Model Endpoints
+
 - `POST /api/models/train` - Train new models
 - `GET /api/models/list` - List available models
 - `POST /api/models/predict` - Make predictions
 
 ### Agent Endpoints
+
 - `POST /api/agent/chat` - Chat with the agent
 - `GET /api/agent/tools` - List available tools
 - `POST /api/agent/analyze` - Perform data analysis
 
 ### Evaluation Endpoints
+
 - `POST /api/evaluation/run` - Run agent evaluation
 - `GET /api/evaluation/results` - Get evaluation results
 
 ## 📊 Azure ADK Evaluation
 
 ### Quick Evaluation
+
 ```python
 from src.evaluation.runner import EvaluationRunner
 
@@ -292,18 +322,21 @@ result = await runner.run_quick_evaluation(num_queries=5)
 ```
 
 ### Comprehensive Evaluation
+
 ```python
 # Run full evaluation across all scenarios
 result = await runner.run_comprehensive_evaluation()
 ```
 
 ### Performance Benchmark
+
 ```python
 # Test performance and response times
 result = await runner.run_performance_benchmark()
 ```
 
 ### Evaluation Scenarios
+
 - **Basic Math**: Simple mathematical operations
 - **Statistical Analysis**: Advanced statistical computations
 - **Data Visualization**: Chart and plot generation
@@ -313,18 +346,21 @@ result = await runner.run_performance_benchmark()
 ## 🎨 Frontend Features
 
 ### Agent Chat Interface
+
 - Real-time conversation with the AI agent
 - Syntax highlighting for code responses
 - File upload for data analysis
 - Response history and export
 
 ### Model Management
+
 - Train new models with custom parameters
 - View model performance metrics
 - Compare different algorithms
 - Deploy models for inference
 
 ### Evaluation Dashboard
+
 - View evaluation results and metrics
 - Performance trend analysis
 - Scenario-based testing results
@@ -333,6 +369,7 @@ result = await runner.run_performance_benchmark()
 ## 📈 Evaluation Metrics
 
 ### Built-in Evaluators (Azure AI)
+
 - **Task Adherence**: How well agent follows instructions
 - **Intent Resolution**: User intent identification and resolution
 - **Coherence**: Response flow and logical consistency
@@ -340,6 +377,7 @@ result = await runner.run_performance_benchmark()
 - **Relevance**: Response relevance to queries
 
 ### Custom Evaluators
+
 - **Response Quality**: Numerical task-specific quality assessment
 - **Response Time**: Performance and speed metrics
 - **Tool Usage**: Efficiency of tool utilization
@@ -348,6 +386,7 @@ result = await runner.run_performance_benchmark()
 ## 🐳 Docker Deployment
 
 ### Services Overview
+
 - **Backend**: Python/FastAPI application
 - **Frontend**: React/Node.js application
 - **Database**: PostgreSQL for data persistence
@@ -355,6 +394,7 @@ result = await runner.run_performance_benchmark()
 - **Load Balancer**: Nginx for request distribution
 
 ### Production Deployment
+
 ```bash
 # Build and deploy
 docker-compose -f docker-compose.prod.yml up -d
@@ -369,6 +409,7 @@ docker-compose logs -f backend
 ## 🧪 Testing
 
 ### Run Tests
+
 ```bash
 # Backend tests
 python -m pytest tests/
@@ -384,6 +425,7 @@ cd src/evaluation && python -m pytest
 ```
 
 ### Test Coverage
+
 ```bash
 # Generate coverage report
 python -m pytest --cov=src tests/
@@ -392,6 +434,7 @@ python -m pytest --cov=src tests/
 ## 📚 Configuration
 
 ### Environment Variables
+
 - `GITHUB_TOKEN`: GitHub token for model access
 - `DATABASE_URL`: PostgreSQL connection string
 - `REDIS_URL`: Redis connection string
@@ -399,6 +442,7 @@ python -m pytest --cov=src tests/
 - `MAX_CONCURRENT_REQUESTS`: Request concurrency limit
 
 ### Model Configuration
+
 ```python
 # Training configuration
 training_config = {
@@ -420,12 +464,14 @@ agent_config = {
 ## 🚀 Performance Optimization
 
 ### Backend Optimization
+
 - Async/await for concurrent operations
 - Redis caching for model predictions
 - Connection pooling for database
 - Request batching for multiple predictions
 
 ### Frontend Optimization
+
 - Code splitting and lazy loading
 - Response caching and memoization
 - WebSocket for real-time updates
@@ -461,6 +507,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 For questions and support:
+
 - Create an issue on GitHub
 - Check the documentation in the `docs/` folder
 - Review the configuration examples
@@ -508,36 +555,42 @@ numerics_processor/
 ## Components
 
 ### 1. Model Training Pipeline
+
 - Data preprocessing and feature engineering
 - Model training with different algorithms
 - Model testing and validation
 - Performance evaluation and metrics
 
 ### 2. AI Agent
+
 - Microsoft Agent Framework implementation
 - GitHub models integration
 - Tool integration for external services
 - Multi-turn conversation support
 
 ### 3. REST API
+
 - FastAPI backend for model inference
 - Agent interaction endpoints
 - Authentication and middleware
 - Real-time streaming support
 
 ### 4. Frontend UI
+
 - React-based user interface
 - Agent prompting and chat interface
 - Model performance visualization
 - Evaluation results dashboard
 
 ### 5. Evaluation Framework
+
 - Azure Development Kit (ADK) integration
 - Agent performance metrics
 - Automated testing and benchmarking
 - Report generation
 
 ### 6. Docker Deployment
+
 - Containerized services
 - Local development environment
 - Production-ready deployment
@@ -546,22 +599,23 @@ numerics_processor/
 ## Getting Started
 
 1. **Setup Environment**
+
    ```bash
    pip install -r requirements.txt
    pip install agent-framework-azure-ai --pre
    ```
-
 2. **Configure GitHub Token**
+
    ```bash
    export GITHUB_TOKEN=your_github_token_here
    ```
-
 3. **Run Development Environment**
+
    ```bash
    docker-compose up -d
    ```
-
 4. **Access Services**
+
    - API: http://localhost:8000
    - Frontend: http://localhost:3000
    - API Docs: http://localhost:8000/docs
@@ -578,6 +632,7 @@ numerics_processor/
 ## Architecture
 
 The project follows a microservices architecture with:
+
 - **Backend Services**: Model training, AI agent, and API services
 - **Frontend**: React-based user interface
 - **Evaluation**: Automated testing and performance monitoring

@@ -1,0 +1,119 @@
+version: '3.8'
+
+services:
+  # Optimized AI/ML API Service
+  loan-api-optimized:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+      args:
+        - BUILD_ENV=production
+    container_name: loan-api-optimized
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+      - PYTHONPATH=/app/src
+      - MODEL_PATH=/app/src/models
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - REDIS_URL=redis://loan-redis-optimized:6379
+      - TF_ENABLE_ONEDNN_OPTS=0  # Optimize TensorFlow
+      - CUDA_VISIBLE_DEVICES=""  # Force CPU for consistency
+    volumes:
+      - ../src:/app/src:ro  # Read-only for security
+      - ../examples:/app/examples:ro
+      - model-storage:/app/models  # Persistent model storage
+    depends_on:
+      - loan-redis-optimized
+    networks:
+      - loan-api-optimized-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2.0'
+        reservations:
+          memory: 1G
+          cpus: '1.0'
+
+  # Optimized Redis Cache
+  loan-redis-optimized:
+    image: redis:7-alpine
+    container_name: loan-redis-optimized
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - loan-api-optimized-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Load Balancer & Reverse Proxy
+  loan-nginx-optimized:
+    image: nginx:alpine
+    container_name: loan-nginx-optimized
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.optimized.conf:/etc/nginx/nginx.conf:ro
+      - nginx-logs:/var/log/nginx
+    depends_on:
+      - loan-api-optimized
+    networks:
+      - loan-api-optimized-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Model Training Service (Optional - for retraining)
+  model-trainer-optimized:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    container_name: model-trainer-optimized
+    environment:
+      - ENVIRONMENT=training
+      - PYTHONPATH=/app/src
+      - MODEL_PATH=/app/src/models
+    volumes:
+      - ../src:/app/src
+      - model-storage:/app/models
+    networks:
+      - loan-api-optimized-network
+    profiles:
+      - training  # Only start when explicitly requested
+    command: python optimized_training.py --mode best
+
+networks:
+  loan-api-optimized-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  redis-data:
+    driver: local
+  model-storage:
+    driver: local
+  nginx-logs:
+    driver: local

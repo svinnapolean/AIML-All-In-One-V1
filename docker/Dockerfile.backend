@@ -26,6 +26,9 @@ COPY requirements.txt .
 RUN pip install --upgrade pip setuptools wheel && \
     pip install -r requirements.txt
 
+# Install optimized ML libraries
+RUN pip install lightgbm==4.6.0 xgboost==3.0.2 
+
 # Install Microsoft Agent Framework (preview)
 RUN pip install agent-framework-azure-ai --pre
 
@@ -56,7 +59,7 @@ RUN mkdir -p /app/src /app/models /app/data /app/results /app/logs /app/uploads 
 # Set working directory
 WORKDIR /app
 
-# Copy application code
+# Copy application code and models
 COPY --chown=appuser:appuser src/ ./src/
 COPY --chown=appuser:appuser pyproject.toml ./
 
@@ -70,5 +73,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-# Run the application
-CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
+# Run the model API application
+CMD ["python", "-c", "import sys; sys.path.append('.'); from src.api.model_api import app; import uvicorn; uvicorn.run(app, host='0.0.0.0', port=8000)"]
