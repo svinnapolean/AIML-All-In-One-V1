@@ -1,51 +1,52 @@
-# Simple Docker Compose for Development
-# This is a simplified version for local development
+# Docker Compose for Development
+# Simplified setup for local development and testing of Loan Default Prediction API
 
 version: '3.8'
 
 services:
-  # Backend API Service
-  backend:
+  # Main API Service - Development
+  loan-api-dev:
     build:
       context: ..
-      dockerfile: docker/Dockerfile.backend
-    container_name: numerics-backend-dev
+      dockerfile: docker/Dockerfile.api
+      target: production
+    container_name: loan-api-dev
     ports:
       - "8000:8000"
     environment:
-      - ENVIRONMENT=development
-      - DEBUG=true
-      - API_KEY=dev-api-key-123
-      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - PYTHONPATH=/app/src
+      - MODEL_PATH=/app/src/models
+      - LOG_LEVEL=DEBUG
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
     volumes:
+      # Mount source code for hot reload
       - ../src:/app/src
-      - backend_data:/app/data
-      - backend_models:/app/models
-      - backend_results:/app/results
+      # Mount trained models from the correct src/models directory
+      - ../src/models/saved_models:/app/src/models/saved_models
+      - ../src/models/test_results:/app/src/models/test_results
+      # Mount loan data
+      - ../loan_data:/app/loan_data
+    restart: "no"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     networks:
-      - numerics-dev
-    restart: unless-stopped
-    command: ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+      - loan-api-dev-network
 
-  # Frontend React Service (Development)
-  frontend:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.frontend
-    container_name: numerics-frontend-dev
+  # Redis for development
+  redis-dev:
+    image: redis:7-alpine
+    container_name: loan-redis-dev
     ports:
-      - "3000:3000"
-    depends_on:
-      - backend
+      - "6379:6379"
+    restart: "no"
     networks:
-      - numerics-dev
-    restart: unless-stopped
-
-volumes:
-  backend_data:
-  backend_models:
-  backend_results:
+      - loan-api-dev-network
 
 networks:
-  numerics-dev:
+  loan-api-dev-network:
     driver: bridge
