@@ -133,75 +133,101 @@ export const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">🚀 AI/ML Dashboard</h1>
-        <p className="mt-1 text-sm text-gray-600">
-          Monitor your AI platform, test models, and track performance with real-time evaluations
-        </p>
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6">
+        {/* Header - Responsive */}
+        <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">🚀 AI/ML Dashboard</h1>
+          <p className="mt-1 text-xs sm:text-sm text-gray-600">
+            Monitor your AI platform, test models, and track performance with real-time evaluations
+          </p>
+        </div>
 
-      {/* Navigation Tabs */}
-      <div className="border-b border-gray-200">
-        <nav className="-mb-px flex space-x-8">
-          {[
-            { id: 'overview', name: 'Overview', icon: '🏠' },
-            { id: 'logs', name: 'Action Logs', icon: '📋' },
-            { id: 'evaluations', name: 'Chat Evaluations', icon: '💭' }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`${
-                activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              } whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2`}
-            >
-              <span>{tab.icon}</span>
-              <span>{tab.name}</span>
-            </button>
-          ))}
-        </nav>
-      </div>
+        {/* Navigation Tabs - Mobile Friendly */}
+        <div className="bg-white rounded-lg shadow-sm">
+          <div className="border-b border-gray-200">
+            <nav className="px-4 sm:px-6">
+              <div className="flex space-x-2 sm:space-x-8 overflow-x-auto scrollbar-hide">
+                {[
+                  { id: 'overview', name: 'Overview', icon: '🏠' },
+                  { id: 'logs', name: 'Action Logs', icon: '📋' },
+                  { id: 'evaluations', name: 'Chat Evaluations', icon: '💭' }
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id as any)}
+                    className={`${
+                      activeTab === tab.id
+                        ? 'border-blue-500 text-blue-600'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    } whitespace-nowrap py-3 px-2 sm:px-4 border-b-2 font-medium text-xs sm:text-sm flex items-center space-x-1 sm:space-x-2 min-w-max`}
+                  >
+                    <span className="text-sm sm:text-base">{tab.icon}</span>
+                    <span className="hidden sm:inline">{tab.name}</span>
+                    <span className="sm:hidden text-xs">{tab.name.split(' ')[0]}</span>
+                  </button>
+                ))}
+              </div>
+            </nav>
+          </div>
 
-      {/* Overview Tab */}
-      {activeTab === 'overview' && (
-        <div className="space-y-6">
-          {/* Action Buttons */}
-          <div className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Quick Actions</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button
-                  onClick={handleTestModel}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors"
-                >
-                  <span>🧪</span>
-                  <span>Test Model</span>
-                </button>
-                <button
-                  onClick={handleViewPerformance}
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors"
-                >
-                  <span>📊</span>
-                  <span>View Performance</span>
-                </button>
-                <button
-                  onClick={handleChatWithAI}
-                  className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors"
-                >
-                  <span>💬</span>
-                  <span>Chat with AI</span>
-                </button>
+        {/* Overview Tab */}
+        {activeTab === 'overview' && (
+          <div className="space-y-4 sm:space-y-6 p-4 sm:p-6">
+            {/* Action Buttons - Mobile First */}
+            <div className="bg-white overflow-hidden shadow-sm rounded-lg">
+              <div className="p-4 sm:p-6">
+                <h3 className="text-base sm:text-lg leading-6 font-medium text-gray-900 mb-4">Quick Actions</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                  <button
+                    onClick={handleTestModel}
+                    className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-medium py-3 sm:py-4 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors touch-manipulation"
+                  >
+                    <span className="text-lg sm:text-xl">🧪</span>
+                    <span className="text-sm sm:text-base">Test Model</span>
+                  </button>
+                  <button
+                    onClick={handleViewPerformance}
+                    className="bg-green-500 hover:bg-green-600 active:bg-green-700 text-white font-medium py-3 sm:py-4 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors touch-manipulation"
+                  >
+                    <span className="text-lg sm:text-xl">📊</span>
+                    <span className="text-sm sm:text-base">View Performance</span>
+                  </button>
+                  <button
+                    onClick={handleChatWithAI}
+                    className="bg-purple-500 hover:bg-purple-600 active:bg-purple-700 text-white font-medium py-3 sm:py-4 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors touch-manipulation sm:col-span-2 lg:col-span-1"
+                  >
+                    <span className="text-lg sm:text-xl">💬</span>
+                    <span className="text-sm sm:text-base">Chat with AI</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* API Status - Mobile Responsive */}
+            <div className="bg-white overflow-hidden shadow-sm rounded-lg">
+              <div className="p-4 sm:p-6">
+                <h3 className="text-base sm:text-lg leading-6 font-medium text-gray-900">API Status</h3>
+                {health ? (
+                  <div className="mt-4 space-y-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 w-fit">
+                        {health.status}
+                      </span>
+                      <span className="sm:ml-2 text-sm text-gray-600">Version {health.version}</span>
+                    </div>
+                    <div className="text-sm text-gray-600 space-y-1">
+                      <p>Model: {health.model_name}</p>
+                      <p>Uptime: {Math.floor(health.uptime_seconds / 60)} minutes</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-4 text-sm text-gray-500">Loading status...</div>
+                )}
               </div>
             </div>
           </div>
-
-          {/* API Status */}
-          <div className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
+        )}
               <h3 className="text-lg leading-6 font-medium text-gray-900">API Status</h3>
               {health ? (
                 <div className="mt-4 space-y-2">
@@ -344,6 +370,7 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

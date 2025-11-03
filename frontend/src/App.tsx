@@ -7,8 +7,8 @@ import { TestModelPage } from './pages/TestModelPage';
 function App() {
   return (
     <Router>
-      <div className="App">
-        <div className="max-w-7xl mx-auto">
+      <div className="App min-h-screen bg-gray-50">
+        <div className="w-full">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/chat" element={<ChatPage />} />
