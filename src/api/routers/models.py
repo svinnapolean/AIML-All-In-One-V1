@@ -449,3 +449,205 @@ async def _train_model_background(trainer: ModelTrainer, data_file_path: str, mo
         
     except Exception as e:
         print(f"Error training model {model_name}: {str(e)}")
+
+
+# New evaluation endpoints
+class EvaluationRequest(BaseModel):
+    """Request model for model evaluation"""
+    test_data: Optional[List[Dict[str, Any]]] = None
+    metrics: List[str] = ["mse", "rmse", "r2_score", "mae"]
+
+
+class EvaluationResponse(BaseModel):
+    """Response model for evaluation results"""
+    model_name: str
+    evaluation_metrics: Dict[str, float]
+    sample_predictions: List[Dict[str, Any]]
+    evaluation_time: float
+    test_samples: int
+
+
+@router.post("/evaluate/{model_name}", response_model=EvaluationResponse, summary="Evaluate a trained model")
+async def evaluate_model(model_name: str, request: EvaluationRequest = None):
+    """Evaluate a trained model with test data or generated sample data"""
+    try:
+        import numpy as np
+        import pandas as pd
+        from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+        import time
+        
+        start_time = time.time()
+        
+        # Load the model
+        model_path = f"models/trained_models/{model_name}.joblib"
+        if not os.path.exists(model_path):
+            raise HTTPException(status_code=404, detail=f"Model {model_name} not found")
+        
+        model = joblib.load(model_path)
+        
+        # Generate or use provided test data
+        if request and request.test_data:
+            # Use provided test data
+            test_df = pd.DataFrame(request.test_data)
+            X_test = test_df.iloc[:, :-1]
+            y_test = test_df.iloc[:, -1]
+        else:
+            # Generate sample test data
+            simulator = FeatureSimulator()
+            sample_data = simulator.generate_regression_data(n_samples=100)
+            X_test = sample_data['features']
+            y_test = sample_data['target']
+        
+        # Make predictions
+        y_pred = model.predict(X_test)
+        
+        # Calculate evaluation metrics
+        metrics = {}
+        
+        # Regression metrics
+        metrics['mse'] = float(mean_squared_error(y_test, y_pred))
+        metrics['rmse'] = float(np.sqrt(metrics['mse']))
+        metrics['mae'] = float(mean_absolute_error(y_test, y_pred))
+        metrics['r2_score'] = float(r2_score(y_test, y_pred))
+        
+        # Additional metrics
+        metrics['mean_prediction'] = float(np.mean(y_pred))
+        metrics['std_prediction'] = float(np.std(y_pred))
+        metrics['mean_actual'] = float(np.mean(y_test))
+        metrics['std_actual'] = float(np.std(y_test))
+        
+        # Sample predictions for visualization
+        sample_size = min(10, len(X_test))
+        sample_indices = np.random.choice(len(X_test), sample_size, replace=False)
+        
+        sample_predictions = []
+        for idx in sample_indices:
+            sample_predictions.append({
+                "features": X_test.iloc[idx].tolist() if hasattr(X_test, 'iloc') else X_test[idx].tolist(),
+                "actual": float(y_test.iloc[idx]) if hasattr(y_test, 'iloc') else float(y_test[idx]),
+                "predicted": float(y_pred[idx]),
+                "error": float(abs(y_test.iloc[idx] - y_pred[idx]) if hasattr(y_test, 'iloc') else abs(y_test[idx] - y_pred[idx]))
+            })
+        
+        evaluation_time = time.time() - start_time
+        
+        return EvaluationResponse(
+            model_name=model_name,
+            evaluation_metrics=metrics,
+            sample_predictions=sample_predictions,
+            evaluation_time=evaluation_time,
+            test_samples=len(X_test)
+        )
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error evaluating model: {str(e)}")
+
+
+@router.get("/{model_name}/metrics", summary="Get model performance metrics")
+async def get_model_metrics(model_name: str):
+    """Get stored performance metrics for a specific model"""
+    try:
+        # Check if model exists
+        model_path = f"models/trained_models/{model_name}.joblib"
+        if not os.path.exists(model_path):
+            raise HTTPException(status_code=404, detail=f"Model {model_name} not found")
+        
+        # Try to load cached metrics
+        metrics_path = f"models/trained_models/{model_name}_metrics.json"
+        if os.path.exists(metrics_path):
+            import json
+            with open(metrics_path, 'r') as f:
+                metrics = json.load(f)
+            return metrics
+        else:
+            # If no cached metrics, run evaluation
+            eval_request = EvaluationRequest()
+            evaluation_result = await evaluate_model(model_name, eval_request)
+            
+            # Cache the metrics
+            import json
+            with open(metrics_path, 'w') as f:
+                json.dump(evaluation_result.evaluation_metrics, f)
+            
+            return evaluation_result.evaluation_metrics
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error getting model metrics: {str(e)}")
+
+
+@router.post("/{model_name}/predict-batch", summary="Batch prediction with evaluation")
+async def predict_batch_with_evaluation(
+    model_name: str,
+    file: UploadFile = File(...),
+    include_evaluation: bool = False
+):
+    """Make batch predictions and optionally include evaluation metrics"""
+    try:
+        import pandas as pd
+        import numpy as np
+        from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+        import io
+        
+        # Load the model
+        model_path = f"models/trained_models/{model_name}.joblib"
+        if not os.path.exists(model_path):
+            raise HTTPException(status_code=404, detail=f"Model {model_name} not found")
+        
+        model = joblib.load(model_path)
+        
+        # Read uploaded file
+        content = await file.read()
+        
+        try:
+            # Try to read as CSV
+            df = pd.read_csv(io.StringIO(content.decode('utf-8')))
+        except:
+            try:
+                # Try to read as Excel
+                df = pd.read_excel(io.BytesIO(content))
+            except:
+                raise HTTPException(status_code=400, detail="File must be CSV or Excel format")
+        
+        # Check if file has target column for evaluation
+        has_target = include_evaluation and len(df.columns) > 1
+        
+        if has_target:
+            # Assume last column is target
+            X = df.iloc[:, :-1]
+            y_true = df.iloc[:, -1]
+        else:
+            X = df
+            y_true = None
+        
+        # Make predictions
+        predictions = model.predict(X)
+        
+        result = {
+            "model_name": model_name,
+            "predictions": predictions.tolist(),
+            "input_summary": {
+                "rows": len(df),
+                "features": list(X.columns),
+                "feature_count": len(X.columns)
+            }
+        }
+        
+        # Add evaluation metrics if target is available
+        if has_target and y_true is not None:
+            metrics = {
+                'mse': float(mean_squared_error(y_true, predictions)),
+                'mae': float(mean_absolute_error(y_true, predictions)),
+                'r2_score': float(r2_score(y_true, predictions))
+            }
+            metrics['rmse'] = float(np.sqrt(metrics['mse']))
+            
+            result['evaluation_metrics'] = metrics
+            result['actual_vs_predicted'] = [
+                {"actual": float(y_true.iloc[i]), "predicted": float(predictions[i])}
+                for i in range(min(50, len(predictions)))  # Limit to first 50 for response size
+            ]
+        
+        return result
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in batch prediction: {str(e)}")
