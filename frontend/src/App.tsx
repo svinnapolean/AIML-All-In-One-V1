@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Dashboard } from './pages/EnhancedDashboard';
+import Dashboard from './pages/EnhancedDashboard';
 import { ChatPage } from './pages/ChatPage';
 import { TestModelPage } from './pages/TestModelPage';
 
