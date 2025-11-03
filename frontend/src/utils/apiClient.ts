@@ -1,8 +1,10 @@
+import { getApiBaseUrl } from '../config/apiConfig';
+
 class APIClient {
   private baseUrl: string;
   
-  constructor(baseUrl: string = 'http://localhost:8000') {
-    this.baseUrl = baseUrl;
+  constructor(baseUrl?: string) {
+    this.baseUrl = baseUrl || getApiBaseUrl();
   }
 
   async healthCheck() {

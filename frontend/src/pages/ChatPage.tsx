@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { getApiBaseUrl, getWebSocketUrl } from '../config/apiConfig';
 import { useNavigate } from 'react-router-dom';
 
 interface Message {
@@ -101,11 +102,11 @@ export const ChatPage: React.FC = () => {
       let assistantContent = '';
       
       if (inputMode === 'text') {
-        assistantContent = `AI Response: I understand you're asking about "${message}". This is a simulated response from the ${selectedModel} model running on localhost:8000.`;
+        assistantContent = `AI Response: I understand you're asking about "${message}". This is a simulated response from the ${selectedModel} model.`;
       } else if (inputMode === 'data') {
-        assistantContent = `Prediction Result: Based on test data [${testData}], the model predicts: [simulated result]. This would connect to your ML API at localhost:8000/predict.`;
+        assistantContent = `Prediction Result: Based on test data [${testData}], the model predicts: [simulated result]. This would connect to your ML API at /api/predict.`;
       } else if (inputMode === 'file' && uploadedFile) {
-        assistantContent = `Batch Processing: File "${uploadedFile.name}" (${(uploadedFile.size / 1024).toFixed(1)} KB) would be processed through localhost:8000/predict-batch. Results would be displayed here.`;
+        assistantContent = `Batch Processing: File "${uploadedFile.name}" (${(uploadedFile.size / 1024).toFixed(1)} KB) would be processed through /api/predict-batch. Results would be displayed here.`;
       }
 
       const assistantMessage: Message = {
@@ -128,7 +129,7 @@ export const ChatPage: React.FC = () => {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: 'assistant',
-        content: `Error: ${error}. Please ensure your backend is running on localhost:8000.`,
+        content: `Error: ${error}. Please ensure your backend is running and accessible.`,
         timestamp: new Date().toISOString(),
         model: selectedModel
       };

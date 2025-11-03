@@ -107,9 +107,20 @@ app = FastAPI(
 )
 
 # Add CORS middleware
+allowed_origins = [
+    "http://localhost:3000", 
+    "http://127.0.0.1:3000",
+    "http://localhost:3001",  # Docker frontend port
+    "http://127.0.0.1:3001"
+]
+
+# In production, allow all origins if behind nginx proxy
+if os.getenv("ENVIRONMENT") == "production":
+    allowed_origins = ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],  # React frontend
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
