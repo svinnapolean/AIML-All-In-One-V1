@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # Backend API Service
+  ai-ml-backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    container_name: ai-ml-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - API_KEY=ai-ml-learning-platform-key-2024
+    volumes:
+      - backend_data:/app/data
+      - backend_models:/app/models
+    networks:
+      - ai-ml-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend React Service
+  ai-ml-frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    container_name: ai-ml-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - ai-ml-backend
+    networks:
+      - ai-ml-network
+    restart: unless-stopped
+
+# Persistent volumes
+volumes:
+  backend_data:
+    driver: local
+  backend_models:
+    driver: local
+
+# Networks
+networks:
+  ai-ml-network:
+    driver: bridge
