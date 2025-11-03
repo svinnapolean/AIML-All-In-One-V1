@@ -311,33 +311,33 @@ export const TestModelPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between">
+      {/* Header - Responsive */}
+      <div className="bg-white border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
           <button
             onClick={() => navigate('/')}
-            className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors self-start"
           >
-            <span>←</span>
-            <span>Back to Dashboard</span>
+            <span className="text-lg">←</span>
+            <span className="text-sm sm:text-base">Back to Dashboard</span>
           </button>
-          <h1 className="text-2xl font-bold text-gray-900">🧪 Model Testing & Evaluation</h1>
-          <div className="w-32"></div>
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 text-center sm:text-left">🧪 Model Testing & Evaluation</h1>
+          <div className="hidden sm:block w-32"></div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="space-y-6">
+      <div className="max-w-7xl mx-auto py-4 sm:py-6 px-4 sm:px-6 lg:px-8">
+        <div className="space-y-4 sm:space-y-6">`
           
-          {/* Model Selection */}
-          <div className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Select Model for Testing</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Model Selection - Mobile First */}
+          <div className="bg-white overflow-hidden shadow-sm rounded-lg">
+            <div className="p-4 sm:p-6">
+              <h3 className="text-base sm:text-lg leading-6 font-medium text-gray-900 mb-4">Select Model for Testing</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {models.map((model) => (
                   <div
                     key={model.name}
-                    className={`border-2 rounded-lg p-4 cursor-pointer transition-colors ${
+                    className={`border-2 rounded-lg p-3 sm:p-4 cursor-pointer transition-colors touch-manipulation ${
                       selectedModel === model.name
                         ? 'border-blue-500 bg-blue-50'
                         : 'border-gray-200 hover:border-gray-300'
@@ -345,19 +345,19 @@ export const TestModelPage: React.FC = () => {
                     onClick={() => setSelectedModel(model.name)}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-semibold text-gray-900">{model.name}</h4>
-                      <span className={`px-2 py-1 text-xs rounded-full ${
+                      <h4 className="font-semibold text-gray-900 text-sm sm:text-base truncate">{model.name}</h4>
+                      <span className={`px-2 py-1 text-xs rounded-full flex-shrink-0 ml-2 ${
                         model.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                       }`}>
                         {model.status}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-2">{model.type}</p>
-                    <p className="text-xs text-gray-500">{model.description}</p>
+                    <p className="text-xs sm:text-sm text-gray-600 mb-2">{model.type}</p>
+                    <p className="text-xs text-gray-500 break-words">{model.description}</p>
                     {model.performance && (
-                      <div className="mt-2 text-xs text-blue-600">
-                        {model.performance.roc_auc && `ROC AUC: ${model.performance.roc_auc.toFixed(3)}`}
-                        {model.performance.accuracy && ` | Accuracy: ${(model.performance.accuracy * 100).toFixed(1)}%`}
+                      <div className="mt-2 text-xs text-blue-600 flex flex-col sm:flex-row sm:space-x-2 space-y-1 sm:space-y-0">
+                        {model.performance.roc_auc && <span>ROC AUC: {model.performance.roc_auc.toFixed(3)}</span>}
+                        {model.performance.accuracy && <span>Accuracy: {(model.performance.accuracy * 100).toFixed(1)}%</span>}
                       </div>
                     )}
                   </div>
@@ -366,15 +366,15 @@ export const TestModelPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Testing Interface */}
-          <div className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg leading-6 font-medium text-gray-900">Test Model</h3>
+          {/* Testing Interface - Mobile Responsive */}
+          <div className="bg-white overflow-hidden shadow-sm rounded-lg">
+            <div className="p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-2 sm:space-y-0">
+                <h3 className="text-base sm:text-lg leading-6 font-medium text-gray-900">Test Model</h3>
                 <div className="flex space-x-2">
                   <button
                     onClick={() => setTestType('single')}
-                    className={`px-3 py-1 text-sm rounded ${
+                    className={`px-3 py-2 text-xs sm:text-sm rounded transition-colors ${
                       testType === 'single' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
                     }`}
                   >
@@ -382,7 +382,7 @@ export const TestModelPage: React.FC = () => {
                   </button>
                   <button
                     onClick={() => setTestType('batch')}
-                    className={`px-3 py-1 text-sm rounded ${
+                    className={`px-3 py-2 text-xs sm:text-sm rounded transition-colors ${
                       testType === 'batch' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'
                     }`}
                   >
@@ -394,7 +394,7 @@ export const TestModelPage: React.FC = () => {
               {testType === 'single' ? (
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                       Test Data (comma-separated values):
                     </label>
                     <input
@@ -402,21 +402,21 @@ export const TestModelPage: React.FC = () => {
                       value={testData}
                       onChange={(e) => setTestData(e.target.value)}
                       placeholder="e.g., 1,2,3,4 or 0.5,1.2,3.7,2.1"
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
-                  <div className="flex space-x-4">
+                  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
                     <button
                       onClick={testSinglePrediction}
                       disabled={!testData.trim() || !selectedModel || loading}
-                      className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white px-6 py-2 rounded-lg font-medium"
+                      className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium text-sm sm:text-base transition-colors touch-manipulation"
                     >
                       {loading ? 'Testing...' : 'Test Model'}
                     </button>
                     <button
                       onClick={runModelEvaluation}
                       disabled={!selectedModel || loading}
-                      className="bg-purple-500 hover:bg-purple-600 disabled:bg-gray-300 text-white px-6 py-2 rounded-lg font-medium"
+                      className="bg-purple-500 hover:bg-purple-600 disabled:bg-gray-300 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium text-sm sm:text-base transition-colors touch-manipulation"
                     >
                       {loading ? 'Evaluating...' : 'Run Evaluation'}
                     </button>
@@ -425,33 +425,33 @@ export const TestModelPage: React.FC = () => {
               ) : (
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                       Upload CSV file for batch testing:
                     </label>
                     <input
                       type="file"
                       accept=".csv"
                       onChange={handleFileSelect}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                     {uploadedFile && (
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-xs sm:text-sm text-gray-600 mt-1">
                         Selected: {uploadedFile.name} ({(uploadedFile.size / 1024).toFixed(1)} KB)
                       </p>
                     )}
                   </div>
-                  <div className="flex space-x-4">
+                  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
                     <button
                       onClick={testBatchPrediction}
                       disabled={!uploadedFile || !selectedModel || loading}
-                      className="bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white px-6 py-2 rounded-lg font-medium"
+                      className="bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium text-sm sm:text-base transition-colors touch-manipulation"
                     >
                       {loading ? 'Processing...' : 'Batch Test'}
                     </button>
                     <button
                       onClick={runModelEvaluation}
                       disabled={!selectedModel || loading}
-                      className="bg-purple-500 hover:bg-purple-600 disabled:bg-gray-300 text-white px-6 py-2 rounded-lg font-medium"
+                      className="bg-purple-500 hover:bg-purple-600 disabled:bg-gray-300 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium text-sm sm:text-base transition-colors touch-manipulation"
                     >
                       {loading ? 'Evaluating...' : 'Run Evaluation'}
                     </button>
