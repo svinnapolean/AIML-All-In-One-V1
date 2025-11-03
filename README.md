@@ -18,6 +18,7 @@ A production-ready educational platform designed for learning AI/ML development,
 **Need AI/ML implementation for your business?** This platform provides a complete, ready-to-deploy solution that can be customized for your specific requirements. Contact for licensing and professional services.
 
 **✅ Enterprise Features:**
+
 - Complete ML pipeline with model training, testing, and deployment
 - AI Agent framework with Microsoft Azure integration
 - REST API for seamless integration with existing systems
@@ -683,23 +684,26 @@ The project follows a microservices architecture with:
 This AI/ML Learning Platform is designed as a comprehensive, one-stop solution for AI/ML development and deployment. If your corporation or organization is interested in licensing this platform, customizing it for your specific needs, or collaborating on AI/ML projects, please feel free to reach out.
 
 **Contact Information:**
-- 📧 **Email**: [Your Gmail Address]
-- 💼 **LinkedIn**: [Your LinkedIn Profile URL]
-- 🐙 **GitHub**: [Your GitHub Profile URL]
+
+- 📧 **Email**: Vincent Susai
+- 💼 **LinkedIn**: https://www.linkedin.com/in/vincent-napolean-susai/
+- 🐙 **GitHub**: https://github.com/svinnapolean/
 - 🌐 **Repository**: https://github.com/svinnapolean/AIML-All-In-One-V1
 
 ### 📄 License & Copyright
 
-This project is created and maintained by **[Your Name]** as an educational resource for the AI/ML community.
+This project is created and maintained by **Vincent Susai** as an educational resource for the AI/ML community.
 
 **Copyright Notice:**
-- © 2024-2025 [Your Name]. All rights reserved.
+
+- © 2024-2025 Vincent Susai. All rights reserved.
 - This project is intended for educational and learning purposes.
 - For commercial use, licensing, or corporate implementations, please contact the author.
 
 ### 🏢 Corporate Licensing
 
 **For Corporate Use:**
+
 - ✅ Complete AI/ML platform ready for enterprise deployment
 - ✅ Customizable for specific business requirements
 - ✅ Full documentation and training materials included
@@ -707,6 +711,7 @@ This project is created and maintained by **[Your Name]** as an educational reso
 - ✅ Scalable architecture for production environments
 
 **Enterprise Features Available:**
+
 - Custom model training for domain-specific data
 - Advanced evaluation metrics and monitoring
 - Multi-tenant deployment configurations
@@ -716,6 +721,7 @@ This project is created and maintained by **[Your Name]** as an educational reso
 ### 🎓 Educational Mission
 
 This platform serves as a comprehensive learning resource for:
+
 - **Students** learning AI/ML development
 - **Developers** transitioning to ML engineering
 - **Organizations** implementing AI solutions
@@ -724,6 +730,7 @@ This platform serves as a comprehensive learning resource for:
 ### 🤝 Collaboration Opportunities
 
 I'm open to:
+
 - 🤝 **Consulting projects** for AI/ML implementations
 - 🏢 **Corporate training** on AI/ML development practices
 - 🔬 **Research collaborations** in AI/ML deployment
@@ -732,6 +739,6 @@ I'm open to:
 
 ---
 
-**Built with ❤️ by [Your Name]** | **Empowering AI/ML Learning & Development**
+**Built with ❤️ by Vincent Susai** | **Empowering AI/ML Learning & Development**
 
 *"One platform to learn, develop, and deploy AI/ML solutions with professional-grade practices."*
