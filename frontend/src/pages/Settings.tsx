@@ -1,4 +1,5 @@
 import React from 'react';
+import { getApiBaseUrl } from '../config/apiConfig';
 
 export const Settings: React.FC = () => {
   return (
@@ -17,7 +18,7 @@ export const Settings: React.FC = () => {
             <label className="block text-sm font-medium text-gray-700">API Endpoint</label>
             <input
               type="text"
-              value="http://localhost:8000"
+              value={getApiBaseUrl()}
               readOnly
               className="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-50"
             />

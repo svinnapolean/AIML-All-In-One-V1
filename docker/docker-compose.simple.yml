@@ -8,7 +8,7 @@ services:
       dockerfile: docker/Dockerfile.backend
     container_name: ai-ml-backend
     ports:
-      - "8000:8000"
+      - "8001:8000"  # Changed from 8000 to 8001 to avoid conflict
     environment:
       - ENVIRONMENT=production
       - API_HOST=0.0.0.0
@@ -33,7 +33,7 @@ services:
       dockerfile: docker/Dockerfile.frontend
     container_name: ai-ml-frontend
     ports:
-      - "3000:3000"
+      - "3001:3000"  # Changed from 3000 to 3001 for clarity
     depends_on:
       - ai-ml-backend
     networks:

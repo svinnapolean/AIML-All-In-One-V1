@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { getApiBaseUrl, getHealthCheckUrl } from '../config/apiConfig';
 import { useNavigate } from 'react-router-dom';
 
 interface APIHealth {
@@ -83,7 +84,7 @@ export const Dashboard: React.FC = () => {
     
     try {
       // Simulate API call to get performance data
-      const response = await fetch('http://localhost:8000/health');
+      const response = await fetch(getHealthCheckUrl());
       const data = await response.json();
       const duration = Date.now() - startTime;
       updateActionLog(logId, 'success', `Performance data loaded. Found ${Object.keys(data.available_models || {}).length} models`, duration);
@@ -101,7 +102,7 @@ export const Dashboard: React.FC = () => {
     const fetchData = async () => {
       try {
         // Fetch API health
-        const healthResponse = await fetch('http://localhost:8000/health');
+        const healthResponse = await fetch(getHealthCheckUrl());
         const healthData = await healthResponse.json();
         setHealth(healthData);
       } catch (error) {

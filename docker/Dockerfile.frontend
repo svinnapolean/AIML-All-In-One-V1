@@ -13,8 +13,11 @@ COPY frontend/package*.json ./
 # Install dependencies
 RUN npm ci --only=production
 
-# Copy source code
+# Copy source code and environment files
 COPY frontend/ ./
+
+# Set production environment for build
+ENV NODE_ENV=production
 
 # Build the application
 RUN npm run build

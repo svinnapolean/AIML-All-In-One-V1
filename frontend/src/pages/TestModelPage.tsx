@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { getApiBaseUrl } from '../config/apiConfig';
 import { useNavigate } from 'react-router-dom';
 
 interface ModelInfo {
@@ -65,7 +66,7 @@ export const TestModelPage: React.FC = () => {
   useEffect(() => {
     const loadModels = async () => {
       try {
-        const response = await fetch('http://localhost:8000/models');
+        const response = await fetch(`${getApiBaseUrl()}/models`);
         const data = await response.json();
         
         const modelList: ModelInfo[] = Object.entries(data.available_models || {}).map(([name, info]: [string, any]) => ({
@@ -157,7 +158,7 @@ export const TestModelPage: React.FC = () => {
     
     try {
       const features = JSON.parse(`[${testData}]`);
-      const response = await fetch('http://localhost:8000/predict', {
+      const response = await fetch(`${getApiBaseUrl()}/predict`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -214,7 +215,7 @@ export const TestModelPage: React.FC = () => {
       formData.append('file', uploadedFile);
       formData.append('model', selectedModel);
       
-      const response = await fetch('http://localhost:8000/predict-batch', {
+      const response = await fetch(`${getApiBaseUrl()}/predict-batch`, {
         method: 'POST',
         body: formData
       });
@@ -263,7 +264,7 @@ export const TestModelPage: React.FC = () => {
     
     try {
       // Try to get evaluation from API
-      const response = await fetch(`http://localhost:8000/evaluate/${selectedModel}`, {
+      const response = await fetch(`${getApiBaseUrl()}/evaluate/${selectedModel}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
