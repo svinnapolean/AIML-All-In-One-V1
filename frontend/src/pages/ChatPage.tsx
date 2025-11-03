@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getApiBaseUrl, getWebSocketUrl } from '../config/apiConfig';
 import { useNavigate } from 'react-router-dom';
 
 interface Message {
@@ -28,6 +27,7 @@ export const ChatPage: React.FC = () => {
   const [testData, setTestData] = useState('');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [inputMode, setInputMode] = useState<'text' | 'data' | 'file'>('text');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -44,6 +44,17 @@ export const ChatPage: React.FC = () => {
     scrollToBottom();
   }, [currentSession?.messages]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const createNewChat = () => {
     const newSession: ChatSession = {
       id: Date.now().toString(),
@@ -54,6 +65,16 @@ export const ChatPage: React.FC = () => {
     };
     setSessions(prev => [newSession, ...prev]);
     setCurrentSession(newSession);
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setIsSidebarOpen(false);
+    }
+  };
+
+  const handleSessionSelect = (session: ChatSession) => {
+    setCurrentSession(session);
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setIsSidebarOpen(false);
+    }
   };
 
   const sendMessage = async () => {
@@ -165,29 +186,57 @@ export const ChatPage: React.FC = () => {
     if (currentSession?.id === sessionId) {
       setCurrentSession(null);
     }
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setIsSidebarOpen(false);
+    }
   };
 
   return (
     <div className="h-screen bg-gray-50 flex flex-col">
       {/* Top Navigation */}
       <div className="bg-white border-b border-gray-200 px-4 py-3">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <button
             onClick={() => navigate('/')}
             className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
           >
             <span>←</span>
-            <span>Back to Dashboard</span>
+            <span className="text-sm sm:text-base">Back to Dashboard</span>
           </button>
-          <h1 className="text-lg font-semibold text-gray-900">🤖 AI Chat Interface</h1>
-          <div className="w-32"></div>
+          <h1 className="flex-1 text-center text-base sm:text-lg font-semibold text-gray-900">
+            🤖 AI Chat Interface
+          </h1>
+          <div className="flex items-center justify-end flex-1 sm:flex-none gap-3">
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="lg:hidden inline-flex items-center space-x-2 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-700 shadow-sm hover:bg-gray-50"
+            >
+              <span>📜</span>
+              <span>History</span>
+            </button>
+            <div className="hidden lg:block w-32" aria-hidden="true"></div>
+          </div>
         </div>
       </div>
 
+      {/* Mobile Overlay */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/40 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
+
       {/* Main Content */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden flex flex-col lg:flex-row">
         {/* Sidebar */}
-        <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
+        <div
+          className={`z-40 bg-white border-r border-gray-200 flex flex-col transition-transform duration-200 ease-in-out lg:static lg:z-auto lg:w-80 lg:flex lg:translate-x-0 ${
+            isSidebarOpen
+              ? 'fixed inset-y-0 left-0 flex w-full max-w-sm translate-x-0 shadow-xl'
+              : 'hidden lg:flex'
+          }`}
+        >
           {/* New Chat Button */}
           <div className="p-4 border-b border-gray-200">
             <button
@@ -196,6 +245,17 @@ export const ChatPage: React.FC = () => {
             >
               <span>➕</span>
               <span>New Chat</span>
+            </button>
+          </div>
+
+          {/* Mobile Close */}
+          <div className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-gray-200">
+            <h2 className="text-sm font-semibold text-gray-900">Conversations</h2>
+            <button
+              onClick={() => setIsSidebarOpen(false)}
+              className="text-gray-500 hover:text-gray-900 text-sm"
+            >
+              Close ✕
             </button>
           </div>
 
@@ -230,7 +290,7 @@ export const ChatPage: React.FC = () => {
                     className={`p-3 rounded-lg cursor-pointer hover:bg-gray-50 ${
                       currentSession?.id === session.id ? 'bg-blue-50 border border-blue-200' : 'bg-gray-50'
                     }`}
-                    onClick={() => setCurrentSession(session)}
+                    onClick={() => handleSessionSelect(session)}
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1 min-w-0">
@@ -265,7 +325,7 @@ export const ChatPage: React.FC = () => {
         <div className="flex-1 flex flex-col">
           {/* Chat Header */}
           <div className="bg-white border-b border-gray-200 p-4">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h2 className="text-lg font-semibold text-gray-900">
                   {currentSession ? currentSession.title : 'Select or Create a Chat'}
@@ -278,10 +338,10 @@ export const ChatPage: React.FC = () => {
               </div>
               
               {/* Input Mode Selector */}
-              <div className="flex space-x-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   onClick={() => setInputMode('text')}
-                  className={`px-3 py-1 text-xs rounded ${
+                  className={`px-3 py-1 text-xs sm:text-sm rounded ${
                     inputMode === 'text' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
                   }`}
                 >
@@ -289,7 +349,7 @@ export const ChatPage: React.FC = () => {
                 </button>
                 <button
                   onClick={() => setInputMode('data')}
-                  className={`px-3 py-1 text-xs rounded ${
+                  className={`px-3 py-1 text-xs sm:text-sm rounded ${
                     inputMode === 'data' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'
                   }`}
                 >
@@ -297,7 +357,7 @@ export const ChatPage: React.FC = () => {
                 </button>
                 <button
                   onClick={() => setInputMode('file')}
-                  className={`px-3 py-1 text-xs rounded ${
+                  className={`px-3 py-1 text-xs sm:text-sm rounded ${
                     inputMode === 'file' ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-700'
                   }`}
                 >
@@ -308,7 +368,7 @@ export const ChatPage: React.FC = () => {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-4">
             {currentSession ? (
               <>
                 {currentSession.messages.map((msg) => (
@@ -317,13 +377,13 @@ export const ChatPage: React.FC = () => {
                     className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-3xl p-4 rounded-lg ${
+                      className={`max-w-full sm:max-w-2xl lg:max-w-3xl p-4 rounded-lg ${
                         msg.type === 'user'
                           ? 'bg-blue-500 text-white'
                           : 'bg-white border border-gray-200 text-gray-900'
                       }`}
                     >
-                      <div className="whitespace-pre-wrap">{msg.content}</div>
+                      <div className="whitespace-pre-wrap break-words text-sm sm:text-base">{msg.content}</div>
                       <div className="text-xs opacity-75 mt-2">
                         {new Date(msg.timestamp).toLocaleTimeString()} • {msg.model}
                       </div>
@@ -332,7 +392,7 @@ export const ChatPage: React.FC = () => {
                 ))}
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-white border border-gray-200 text-gray-900 p-4 rounded-lg">
+                    <div className="max-w-full sm:max-w-md bg-white border border-gray-200 text-gray-900 p-4 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
                         <span>Processing...</span>
@@ -345,8 +405,8 @@ export const ChatPage: React.FC = () => {
             ) : (
               <div className="flex items-center justify-center h-full">
                 <div className="text-center">
-                  <div className="text-6xl mb-4">💬</div>
-                  <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                  <div className="text-4xl sm:text-6xl mb-4">💬</div>
+                  <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
                     Welcome to AI Chat
                   </h2>
                   <p className="text-gray-600 mb-4">
@@ -366,7 +426,7 @@ export const ChatPage: React.FC = () => {
           {/* Input Area */}
           <div className="bg-white border-t border-gray-200 p-4">
             {inputMode === 'text' && (
-              <div className="flex space-x-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                 <input
                   type="text"
                   value={message}
@@ -379,7 +439,7 @@ export const ChatPage: React.FC = () => {
                 <button
                   onClick={sendMessage}
                   disabled={!message.trim() || isLoading}
-                  className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white px-6 py-2 rounded-lg font-medium"
+                  className="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white px-6 py-2 rounded-lg font-medium"
                 >
                   Send
                 </button>
@@ -391,7 +451,7 @@ export const ChatPage: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700">
                   Enter test data (comma-separated):
                 </label>
-                <div className="flex space-x-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                   <input
                     type="text"
                     value={testData}
@@ -404,7 +464,7 @@ export const ChatPage: React.FC = () => {
                   <button
                     onClick={sendMessage}
                     disabled={!testData.trim() || isLoading}
-                    className="bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white px-6 py-2 rounded-lg font-medium"
+                    className="w-full sm:w-auto bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white px-6 py-2 rounded-lg font-medium"
                   >
                     Predict
                   </button>
@@ -417,7 +477,7 @@ export const ChatPage: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700">
                   Upload CSV file for batch prediction:
                 </label>
-                <div className="flex space-x-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -429,7 +489,7 @@ export const ChatPage: React.FC = () => {
                   <button
                     onClick={sendMessage}
                     disabled={!uploadedFile || isLoading}
-                    className="bg-purple-500 hover:bg-purple-600 disabled:bg-gray-300 text-white px-6 py-2 rounded-lg font-medium"
+                    className="w-full sm:w-auto bg-purple-500 hover:bg-purple-600 disabled:bg-gray-300 text-white px-6 py-2 rounded-lg font-medium"
                   >
                     Process
                   </button>
